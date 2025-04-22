@@ -1,4 +1,5 @@
-import NextAuth from "next-auth";
+import NextAuth, { Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
@@ -18,4 +19,19 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async session({ session, token }: { session: Session; token: JWT }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+      }
+      // Optionally log instead of throwing error for debugging
+      if (!token.sub) {
+        console.warn("User ID (sub) not found in token");
+      }
+      return session;
+    },
+  },
 };
+
+export default NextAuth(authOptions);

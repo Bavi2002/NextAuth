@@ -1,17 +1,14 @@
-import Image from "next/image";
+// No "use client" here
+import { redirect } from "next/navigation";
+import { getUserSession } from "./lib/session";
+import ProfileCard from "@/components/ProfileCard"; // create this
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold">Welcome to Next.js!</h1>
-      <p className="mt-4 text-lg">This is a simple Next.js application.</p>
-      <Image
-        src="/next.svg"
-        alt="Next.js Logo"
-        width={180}
-        height={37}
-        priority
-      />
-    </main>
-  );
+export default async function Home() {
+  const session = await getUserSession();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  return <ProfileCard session={session} />;
 }

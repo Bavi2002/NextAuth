@@ -10,25 +10,31 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { signIn, signOut } from "next-auth/react"
+
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [loading, setLoading] = useState(false);
-
+  
   const handleLogin = async (provider: string) => {
-    setLoading(true);
     try {
       await signIn(provider, { callbackUrl: "/" });
     } catch (error) {
       console.error("Login error:", error);
-    } finally {
-      setLoading(false);
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      await signOut({ callbackUrl: "/" });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -66,8 +72,14 @@ export function LoginForm({
                 <Button type="submit" className="w-full">
                   Login
                 </Button>
-                <Button variant="outline" className="w-full"onClick={() => handleLogin("github")}>
+                <Button variant="outline" className="w-full" onClick={() => handleLogin("github")}>
                   Login with GitHub
+                </Button>
+                <Button variant="outline" className="w-full" onClick={() => handleLogin("google")}>
+                  Login with Google
+                </Button>
+                <Button variant="outline" className="w-full" onClick={() => handleLogin("facebook")}>
+                  Login with Facebook
                 </Button>
               </div>
             </div>
