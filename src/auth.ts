@@ -25,7 +25,6 @@ export const authOptions = {
       if (session.user && token.sub) {
         session.user.id = token.sub;
       }
-      // Optionally log instead of throwing error for debugging
       if (!token.sub) {
         console.warn("User ID (sub) not found in token");
       }

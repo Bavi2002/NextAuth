@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signIn, signOut } from "next-auth/react"
+import { signIn } from "next-auth/react"
 
 
 export function LoginForm({
@@ -25,15 +25,6 @@ export function LoginForm({
       console.error("Login error:", error);
     }
   };
-
-  const handleLogout = async () => {
-    try {
-      await signOut({ callbackUrl: "/" });
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
   
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
